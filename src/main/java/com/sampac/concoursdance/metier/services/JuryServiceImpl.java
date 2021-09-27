@@ -31,7 +31,7 @@ public class JuryServiceImpl implements CrudService<Jury, Long> {
 
     @Override
     public void insert(Jury e) throws AlreadyExistException {
-        if (repository.existsById(e.getId()))
+        if (repository.existsById(e.getId_Jury()))
             throw new AlreadyExistException("Ce jury existe déjà");
 
         repository.save(e);
@@ -39,7 +39,7 @@ public class JuryServiceImpl implements CrudService<Jury, Long> {
 
     @Override
     public void update(Jury e) throws NotFoundException {
-        if (!repository.existsById(e.getId()))
+        if (!repository.existsById(e.getId_Jury()))
             throw new NotFoundException("Aucun jury possède cet ID");
 
         repository.save(e);

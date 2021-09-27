@@ -15,13 +15,27 @@ import java.util.List;
 public class Concours {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id_Concour;
+    @Column(nullable = false)
     private String theme;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private Date date;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "juge_par",
+            joinColumns = @JoinColumn(name = "id_Concour"),
+            inverseJoinColumns = @JoinColumn(name = "id_Jury")
+    )
+    private List<Jury> juries;
 
-//    @ManyToMany
-//    private List<Jury> juges;
-//    @ManyToMany
-//    private List<Candidat> participants;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Participe",
+            joinColumns = @JoinColumn(name = "id_Concour"),
+            inverseJoinColumns = @JoinColumn(name = "id_Candidat")
+    )
+    private List<Candidat> candidats;
+
 }

@@ -33,7 +33,7 @@ public class ConcoursServiceImpl implements CrudService<Concours, Long> {
 
     @Override
     public void insert(Concours e) throws AlreadyExistException {
-        if (repository.existsById(e.getId()))
+        if (repository.existsById(e.getId_Concour()))
             throw new AlreadyExistException("Ce concours existe déjà");
 
         repository.save(e);
@@ -41,7 +41,7 @@ public class ConcoursServiceImpl implements CrudService<Concours, Long> {
 
     @Override
     public void update(Concours e) throws NotFoundException {
-        if (!repository.existsById(e.getId()))
+        if (!repository.existsById(e.getId_Concour()))
             throw new NotFoundException("Aucun concours possède cet ID");
 
         repository.save(e);

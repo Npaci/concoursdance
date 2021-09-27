@@ -31,7 +31,7 @@ public class CandidatServiceImpl implements CrudService<Candidat, Long> {
 
     @Override
     public void insert(Candidat e) throws AlreadyExistException {
-        if (repository.existsById(e.getId()))
+        if (repository.existsById(e.getId_Candidat()))
             throw new AlreadyExistException("Ce candidat existe déjà");
 
         repository.save(e);
@@ -39,7 +39,7 @@ public class CandidatServiceImpl implements CrudService<Candidat, Long> {
 
     @Override
     public void update(Candidat e) throws NotFoundException {
-        if (!repository.existsById(e.getId()))
+        if (!repository.existsById(e.getId_Candidat()))
             throw new NotFoundException("Aucun candidat possède cet ID");
 
         repository.save(e);

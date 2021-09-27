@@ -14,10 +14,12 @@ import java.util.List;
 public class Candidat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id_Candidat;
+    @Column(nullable = false)
     private String nom;
+    @Column(nullable = false)
     private int age;
 
-//    @ManyToMany
-//    private List<Concours> concours;
+    @ManyToMany(mappedBy = "candidats", fetch = FetchType.EAGER)
+    private List<Concours> compet;
 }

@@ -14,10 +14,11 @@ import java.util.List;
 public class Jury {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id_Jury;
+    @Column(nullable = false)
     private String nom;
     private String expertise;
 
-//    @ManyToMany
-//    List<Concours> concours;
+    @ManyToMany(mappedBy = "juries", fetch = FetchType.EAGER)
+    private List<Concours> competitions;
 }
