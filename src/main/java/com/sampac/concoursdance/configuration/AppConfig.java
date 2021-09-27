@@ -11,7 +11,6 @@ public class AppConfig {
     @Bean
     public Scanner scanner(){
         System.out.println("instanciation de scanner");
-        System.out.println("Commit");
         return new Scanner(System.in);
     }
 }
