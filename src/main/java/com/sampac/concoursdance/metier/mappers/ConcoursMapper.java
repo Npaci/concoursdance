@@ -78,4 +78,14 @@ public class ConcoursMapper implements Mapper<Concours, ConcoursDTO> {
                 .date(concours.getDate())
                 .build();
     }
+    public Concours dtoToEntitySmall(ConcoursDTOSmall dto) {
+        if(dto == null)
+            return null;
+        return Concours.builder()
+                .id_Concour(dto.getId())
+                .theme(dto.getTheme())
+                .description(dto.getDescription())
+                .date(dto.getDate())
+                .build();
+    }
 }

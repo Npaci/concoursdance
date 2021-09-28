@@ -31,13 +31,6 @@ public class JuryMapper implements Mapper<Jury, JuryDTO> {
                 .id_Jury(dto.getId())
                 .nom(dto.getNom())
                 .expertise(dto.getExpertise())
-                //Concours
-                /*.competitions(
-                        dto.getConcours()
-                                .stream()
-                                .map(concoursMapper::dtoToEntity)
-                                .collect(Collectors.toList())
-                )*/
                 .build();
     }
 }

@@ -30,12 +30,12 @@ public class CandidatMapper implements Mapper<Candidat, CandidatDTO> {
                 .id_Candidat(dto.getId())
                 .age(dto.getAge())
                 //Concours
-               /* .compet(
+                .compet(
                         dto.getConcours()
                                 .stream()
-                                .map(concoursMapper::dtoToEntity)
+                                .map(concoursMapper::dtoToEntitySmall)
                                 .collect(Collectors.toList())
-                )*/
+                )
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.sampac.concoursdance.metier.services;
 import com.sampac.concoursdance.dataaccess.entities.Candidat;
 import com.sampac.concoursdance.dataaccess.repositories.CandidatRepository;
 import com.sampac.concoursdance.exceptions.AlreadyExistException;
+import com.sampac.concoursdance.exceptions.ElementNotFoundException;
 import com.sampac.concoursdance.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,10 @@ public class CandidatServiceImpl implements CrudService<Candidat, Long> {
     }
 
     @Override
-    public Candidat getByID(Long id) throws NotFoundException {
+    public Candidat getByID(Long id) throws ElementNotFoundException {
         if (!repository.existsById(id))
-            throw new NotFoundException("Aucun candidat possède cet ID");
+           // throw new NotFoundException("Aucun candidat possède cet ID");
+            new ElementNotFoundException();
 
         return repository.findById(id).get();
     }
@@ -38,9 +40,9 @@ public class CandidatServiceImpl implements CrudService<Candidat, Long> {
     }
 
     @Override
-    public void update(Candidat e) throws NotFoundException {
+    public void update(Candidat e) throws ElementNotFoundException {
         if (!repository.existsById(e.getId_Candidat()))
-            throw new NotFoundException("Aucun candidat possède cet ID");
+            throw new ElementNotFoundException();
 
         repository.save(e);
     }

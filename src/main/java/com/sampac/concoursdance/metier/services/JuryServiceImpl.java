@@ -3,6 +3,7 @@ package com.sampac.concoursdance.metier.services;
 import com.sampac.concoursdance.dataaccess.entities.Jury;
 import com.sampac.concoursdance.dataaccess.repositories.JuryRepository;
 import com.sampac.concoursdance.exceptions.AlreadyExistException;
+import com.sampac.concoursdance.exceptions.ElementNotFoundException;
 import com.sampac.concoursdance.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,10 @@ public class JuryServiceImpl implements CrudService<Jury, Long> {
     }
 
     @Override
-    public Jury getByID(Long id) throws NotFoundException {
+    public Jury getByID(Long id) throws ElementNotFoundException {
         if (!repository.existsById(id))
-            throw new NotFoundException("Aucun jury possède cet ID");
+            //throw new NotFoundException("Aucun jury possède cet ID");
+            throw new ElementNotFoundException();
 
         return repository.findById(id).get();
     }
@@ -38,9 +40,9 @@ public class JuryServiceImpl implements CrudService<Jury, Long> {
     }
 
     @Override
-    public void update(Jury e) throws NotFoundException {
+    public void update(Jury e) throws ElementNotFoundException {
         if (!repository.existsById(e.getId_Jury()))
-            throw new NotFoundException("Aucun jury possède cet ID");
+            throw new ElementNotFoundException();
 
         repository.save(e);
     }
