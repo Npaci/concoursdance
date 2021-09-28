@@ -14,6 +14,9 @@ import com.sampac.concoursdance.metier.services.JuryServiceImpl;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,18 +70,31 @@ public class DatabaseFiller implements InitializingBean {
     }
 
     private void creerConcours() {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            concoursList.add(ConcoursDTO.builder()
+                    .id(0)
+                    .theme("Freestyle")
+                    .description("Ca va bien se passer")
+                    .date(formatter.parse("11/03/2019"))
+                    .juges(juryList)
+                    .participants(candidatList)
+                    .build());
+
         concoursList.add(ConcoursDTO.builder()
                 .id(0)
-                .theme("Freestyle")
-                .description("Blablabla")
-                .date(new Date())
+                .theme("Danse contemporaine")
+                .description("C'est une longue histoire")
+                .date(formatter.parse("25/08/2020"))
                 .juges(juryList)
                 .participants(candidatList)
                 .build());
 
-        try {
+
             con_service.insert(concoursList.get(0));
-        }catch (AlreadyExistException ex){
+            con_service.insert(concoursList.get(1));
+        }catch (AlreadyExistException | ParseException ex){
             System.out.println("Erreur DatabaseFiller creerConcours() : "+ex.getMessage());
         }
     }

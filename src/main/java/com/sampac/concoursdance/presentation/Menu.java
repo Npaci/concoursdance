@@ -13,7 +13,8 @@ import com.sampac.concoursdance.metier.services.ConcoursServiceImpl;
 import com.sampac.concoursdance.metier.services.JuryServiceImpl;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class Menu {
             } catch (NumberFormatException ex) {
                 System.out.println(Color.ANSI_RED.val + "Saisie invalide, veuillez entrez un nombre" + Color.ANSI_RESET.val);
             }
-        } while (choix != 6);
+        } while (choix != 7);
     }
 
     private void displayMenu() {
@@ -64,7 +65,8 @@ public class Menu {
                 3 - Détail d'un concour
                 4 - Modifier un concour
                 5 - Touver un candidat
-                6 - quitter """);
+                6 - Supprimer un concours
+                7 - quitter """);
     }
 
     private void mapChoix(int choix) {
@@ -74,8 +76,22 @@ public class Menu {
             case 3 -> detailConcours();
             case 4 -> modifConcours();
             case 5 -> findCandidat();
-            case 6 -> quit();
+            case 6 -> deleteConcours();
+            case 7 -> quit();
             default -> System.out.println("choix invalide");
+        }
+    }
+
+    private void deleteConcours() {
+
+        try {
+            System.out.println(Color.ANSI_GREEN.val+"veuiller donner id du concours: ".toUpperCase()+Color.ANSI_RESET.val);
+            long id = Long.parseLong(scan.nextLine());
+            ConcoursDTO concoursDTO=con_service.getByID(id);
+
+            con_service.delete(id);
+        } catch (ElementNotFoundException e) {
+            System.out.println(e.getMessage());;
         }
     }
 
@@ -103,9 +119,13 @@ public class Menu {
         concoursDTO.theme(scan.nextLine());
         System.out.println(Color.ANSI_GREEN.val+"Entrez la description".toUpperCase()+Color.ANSI_RESET.val);
         concoursDTO.description(scan.nextLine());
-        System.out.println(Color.ANSI_GREEN.val+"Entrez la date".toUpperCase()+Color.ANSI_RESET.val);
-        String dateFormat = "yyyy-MM-dd";
-            concoursDTO.date(Date.valueOf(scan.nextLine()));
+        System.out.println(Color.ANSI_GREEN.val+"Entrez la date (dd/MM/yyyy)".toUpperCase()+Color.ANSI_RESET.val);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            concoursDTO.date(formatter.parse(scan.nextLine()));
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+        }
 
         return concoursDTO;
     }
@@ -149,12 +169,13 @@ public class Menu {
         }
     }
     private void afficheConcoursSmall(List<ConcoursDTOSmall> concours,String nom) {
-        System.out.println(Color.ANSI_BLUE.val+("Liste des Concours où "+nom+" Participe").toUpperCase()+Color.ANSI_RESET.val);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println(Color.ANSI_BLUE.val+("Liste des Concours dans lesquels "+nom+" Participe").toUpperCase()+Color.ANSI_RESET.val);
         for (ConcoursDTOSmall concoursDTO : concours) {
             System.out.format("| %d | %s | %s | %s |\n",
                     concoursDTO.getId(),
                     concoursDTO.getTheme(),
-                    concoursDTO.getDate(),
+                    formatter.format(concoursDTO.getDate()),
                     concoursDTO.getDescription());
         }
     }
@@ -237,14 +258,15 @@ public class Menu {
     }
 
     private void displayAll(){
-       List<ConcoursDTO>list= con_service.getAll();
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        List<ConcoursDTO>list= con_service.getAll();
         System.out.println(Color.ANSI_BLUE.val+("Liste des Concours".toUpperCase()+Color.ANSI_RESET.val));
 
         for (ConcoursDTO concoursDTO : list) {
             System.out.format("| %d | %s | %s | %s |\n",
                     concoursDTO.getId(),
                     concoursDTO.getTheme(),
-                    concoursDTO.getDate(),
+                    formatter.format(concoursDTO.getDate()),
                     concoursDTO.getDescription());
         }
 

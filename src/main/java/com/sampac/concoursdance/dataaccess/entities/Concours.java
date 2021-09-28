@@ -23,6 +23,7 @@ public class Concours {
     private String description;
     @Column(nullable = false)
     private Date date;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "juge_par",
