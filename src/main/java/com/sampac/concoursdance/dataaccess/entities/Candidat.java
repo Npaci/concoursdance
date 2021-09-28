@@ -20,6 +20,6 @@ public class Candidat {
     @Column(nullable = false)
     private int age;
 
-    @ManyToMany(mappedBy = "candidats", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "candidats", fetch = FetchType.LAZY)
     private List<Concours> compet;
 }

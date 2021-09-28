@@ -8,6 +8,7 @@ import com.sampac.concoursdance.exceptions.NotFoundException;
 import com.sampac.concoursdance.metier.dto.ConcoursDTO;
 import com.sampac.concoursdance.metier.mappers.Mapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class ConcoursServiceImpl implements CrudService<ConcoursDTO, Long> {
     }
 
     @Override
+    @Transactional
     public ConcoursDTO getByID(Long id) throws ElementNotFoundException {
         return repository.findById(id)
                 .map(mapper::entityToDTO)
@@ -31,6 +33,7 @@ public class ConcoursServiceImpl implements CrudService<ConcoursDTO, Long> {
     }
 
     @Override
+    @Transactional
     public List<ConcoursDTO> getAll() {
         return repository.findAll().stream()
                 .map(mapper::entityToDTO)

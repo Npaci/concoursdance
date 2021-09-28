@@ -16,6 +16,7 @@ public class CandidatMapper implements Mapper<Candidat, CandidatDTO> {
     public CandidatDTO entityToDTO(Candidat candidat) {
         return CandidatDTO.builder()
                 .id(candidat.getId_Candidat())
+                .nom(candidat.getNom())
                 .age(candidat.getAge())
                 .concours(
                         candidat.getCompet()
@@ -30,6 +31,7 @@ public class CandidatMapper implements Mapper<Candidat, CandidatDTO> {
     public Candidat dtoToEntity(CandidatDTO dto) {
         return Candidat.builder()
                 .id_Candidat(dto.getId())
+                .nom(dto.getNom())
                 .age(dto.getAge())
                 //Concours
                 .compet(
