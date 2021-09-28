@@ -12,6 +12,8 @@ import com.sampac.concoursdance.metier.services.ConcoursServiceImpl;
 import com.sampac.concoursdance.metier.services.JuryServiceImpl;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -75,8 +77,40 @@ public class Menu {
     }
 
     private void modifConcours() {
-    }
 
+        try {
+
+            System.out.println(Color.ANSI_GREEN.val+"veuiller donner id du concours: ".toUpperCase()+Color.ANSI_RESET.val);
+            long id = Long.parseLong(scan.nextLine());
+
+            ConcoursDTO concoursDTO=con_service.getByID(id);
+            ConcoursDTO.ConcoursDTOBuilder concoursDTOnew=initValueConcour();
+            concoursDTOnew.juges(concoursDTO.getJuges());
+            concoursDTOnew.participants(concoursDTO.getParticipants());
+            concoursDTOnew.build();
+            con_service.update(concoursDTOnew.build());
+
+        }
+        catch ( ElementNotFoundException | NumberFormatException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private ConcoursDTO.ConcoursDTOBuilder initValueConcour() {
+        ConcoursDTO.ConcoursDTOBuilder concoursDTO=ConcoursDTO.builder();
+        System.out.println(Color.ANSI_GREEN.val+"Entrez le thème".toUpperCase()+Color.ANSI_RESET.val);
+        concoursDTO.theme(scan.nextLine());
+        System.out.println(Color.ANSI_GREEN.val+"Entrez la description".toUpperCase()+Color.ANSI_RESET.val);
+        concoursDTO.description(scan.nextLine());
+        System.out.println(Color.ANSI_GREEN.val+"Entrez la date".toUpperCase()+Color.ANSI_RESET.val);
+        String dateFormat = "yyyy-MM-dd";
+        try {
+            concoursDTO.description(String.valueOf(new SimpleDateFormat(dateFormat).parse(scan.nextLine())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        concoursDTO.build();
+        return concoursDTO;
+    }
     private void findCandidat() {
         System.out.println(Color.ANSI_GREEN.val+"veuiller donner id du candidat: ".toUpperCase()+Color.ANSI_RESET.val);
         long id = Long.parseLong(scan.nextLine());
