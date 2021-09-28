@@ -11,5 +11,5 @@ public interface CrudService<ENTITY, ID>{
     List<ENTITY> getAll();
     void insert(ENTITY e) throws AlreadyExistException;
     void update(ENTITY e) throws ElementNotFoundException;
-    void delete(ID id) throws NotFoundException;
+    void delete(ID id) throws ElementNotFoundException;
 }

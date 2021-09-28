@@ -48,9 +48,9 @@ public class JuryServiceImpl implements CrudService<Jury, Long> {
     }
 
     @Override
-    public void delete(Long id) throws NotFoundException {
+    public void delete(Long id) throws ElementNotFoundException {
         if (!repository.existsById(id))
-            throw new NotFoundException("Aucun jury possède cet ID");
+            throw new ElementNotFoundException();
 
         repository.deleteById(id);
     }

@@ -53,8 +53,11 @@ public class ConcoursServiceImpl implements CrudService<ConcoursDTO, Long> {
     }
 
     @Override
-    public void delete(Long aLong) throws NotFoundException {
+    public void delete(Long aLong) throws ElementNotFoundException {
+        if( !repository.existsById(aLong) )
+            throw new ElementNotFoundException();
 
+        repository.deleteById(aLong);
     }
 
    /* @Override
