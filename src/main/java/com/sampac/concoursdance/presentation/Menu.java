@@ -34,11 +34,11 @@ public class Menu {
     }
     private void displayMenu(){
         System.out.println("""
-                --- MENU Concour dance ---
-                1 - Créer un concour
-                2 - Lister un concour
-                3 - Détail d'un concour
-                4 - Modifier un concour
+                --- MENU Concours dance ---
+                1 - Créer un concours
+                2 - Lister un concours
+                3 - Détail d'un concours
+                4 - Modifier un concours
                 5 - Touver un candidat
                 6 - quitter
                 """);
@@ -46,7 +46,7 @@ public class Menu {
 
     private void mapChoix(int choix){
         switch (choix){
-            case 1 -> quit();
+            case 1 -> concoursCreate();
             case 2 -> displayAll();
             case 3 -> quit();
             case 4 -> quit();
@@ -55,6 +55,10 @@ public class Menu {
             default -> System.out.println("choix invalide");
         }
     }
+
+    private void concoursCreate() {
+    }
+
     private void displayAll(){
         con_service.getAll()
                 .forEach( System.out::println );

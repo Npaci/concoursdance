@@ -70,6 +70,7 @@ public class DatabaseFiller implements InitializingBean {
                 .date(new Date())
                 .juges(juryList)
                 .build());
+
         concoursList.add(ConcoursDTO.builder()
                 .id(0)
                 .theme("Classique")
@@ -108,10 +109,10 @@ public class DatabaseFiller implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("La DB va être populée");
+
         creerJuries();
         creerConcours();
-        creerCandidats();
-
+//        creerCandidats();
+        System.out.println("La DB a été populée");
     }
 }

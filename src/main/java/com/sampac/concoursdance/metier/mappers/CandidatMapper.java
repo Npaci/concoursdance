@@ -4,9 +4,11 @@ import com.sampac.concoursdance.dataaccess.entities.Candidat;
 import com.sampac.concoursdance.dataaccess.entities.Concours;
 import com.sampac.concoursdance.metier.dto.CandidatDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class CandidatMapper implements Mapper<Candidat, CandidatDTO> {
     @Autowired
     private ConcoursMapper concoursMapper;

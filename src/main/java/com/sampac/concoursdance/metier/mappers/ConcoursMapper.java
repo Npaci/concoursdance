@@ -8,9 +8,11 @@ import com.sampac.concoursdance.metier.dto.ConcoursDTO;
 import com.sampac.concoursdance.metier.dto.ConcoursDTOSmall;
 import com.sampac.concoursdance.metier.dto.JuryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class ConcoursMapper implements Mapper<Concours, ConcoursDTO> {
     @Autowired
     private Mapper<Jury,JuryDTO> juryMapper;

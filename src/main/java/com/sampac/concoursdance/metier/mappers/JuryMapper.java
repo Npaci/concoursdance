@@ -3,9 +3,11 @@ package com.sampac.concoursdance.metier.mappers;
 import com.sampac.concoursdance.dataaccess.entities.Jury;
 import com.sampac.concoursdance.metier.dto.JuryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class JuryMapper implements Mapper<Jury, JuryDTO> {
     @Autowired
     private ConcoursMapper concoursMapper;
