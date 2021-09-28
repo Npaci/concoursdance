@@ -12,11 +12,13 @@ import com.sampac.concoursdance.metier.services.ConcoursServiceImpl;
 import com.sampac.concoursdance.metier.services.JuryServiceImpl;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 @Component
 public class Menu {
@@ -82,12 +84,11 @@ public class Menu {
 
             System.out.println(Color.ANSI_GREEN.val+"veuiller donner id du concours: ".toUpperCase()+Color.ANSI_RESET.val);
             long id = Long.parseLong(scan.nextLine());
-
             ConcoursDTO concoursDTO=con_service.getByID(id);
             ConcoursDTO.ConcoursDTOBuilder concoursDTOnew=initValueConcour();
+            concoursDTOnew.id(concoursDTO.getId());
             concoursDTOnew.juges(concoursDTO.getJuges());
             concoursDTOnew.participants(concoursDTO.getParticipants());
-            concoursDTOnew.build();
             con_service.update(concoursDTOnew.build());
 
         }
@@ -103,12 +104,8 @@ public class Menu {
         concoursDTO.description(scan.nextLine());
         System.out.println(Color.ANSI_GREEN.val+"Entrez la date".toUpperCase()+Color.ANSI_RESET.val);
         String dateFormat = "yyyy-MM-dd";
-        try {
-            concoursDTO.description(String.valueOf(new SimpleDateFormat(dateFormat).parse(scan.nextLine())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        concoursDTO.build();
+            concoursDTO.date(Date.valueOf(scan.nextLine()));
+
         return concoursDTO;
     }
     private void findCandidat() {
