@@ -1,5 +1,6 @@
 package com.sampac.concoursdance.configuration;
 
+import com.sampac.concoursdance.dataaccess.entities.Concours;
 import com.sampac.concoursdance.metier.services.CandidatServiceImpl;
 import com.sampac.concoursdance.metier.services.ConcoursServiceImpl;
 import com.sampac.concoursdance.metier.services.JuryServiceImpl;
@@ -19,6 +20,7 @@ public class DatabaseFiller implements InitializingBean {
     }
 
     private void creerCandidats() {
+
 //        con_service.insert();
 //        con_service.insert();
 //        con_service.insert();
