@@ -39,7 +39,7 @@ public class JuryServiceImpl implements CrudService<JuryDTO, Long> {
     public void insert(JuryDTO e) throws AlreadyExistException {
         if( repository.existsById(e.getId()) )
             throw new AlreadyExistException("Ce jury existe déjà");
-        repository.save( mapper.dtoToEntity(e));
+        repository.save(mapper.dtoToEntity(e));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class JuryServiceImpl implements CrudService<JuryDTO, Long> {
         if( !repository.existsById(e.getId()) )
             throw new ElementNotFoundException();
 
-        repository.save( mapper.dtoToEntity(e) );
+        repository.save(mapper.dtoToEntity(e));
     }
 
     @Override

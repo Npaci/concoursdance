@@ -39,14 +39,14 @@ public class ConcoursServiceImpl implements CrudService<ConcoursDTO, Long> {
 
     @Override
     public void insert(ConcoursDTO e) throws AlreadyExistException {
-        if( repository.existsById(e.getId()) )
+        if(repository.existsById(e.getId()))
             throw new AlreadyExistException("Ce concours existe déjà");
         repository.save( mapper.dtoToEntity(e));
     }
 
     @Override
     public void update(ConcoursDTO e) throws ElementNotFoundException {
-        if( !repository.existsById(e.getId()) )
+        if(!repository.existsById(e.getId()))
             throw new ElementNotFoundException();
 
         repository.save( mapper.dtoToEntity(e) );
@@ -54,7 +54,7 @@ public class ConcoursServiceImpl implements CrudService<ConcoursDTO, Long> {
 
     @Override
     public void delete(Long aLong) throws ElementNotFoundException {
-        if( !repository.existsById(aLong) )
+        if(!repository.existsById(aLong))
             throw new ElementNotFoundException();
 
         repository.deleteById(aLong);
