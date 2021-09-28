@@ -1,9 +1,11 @@
 package com.sampac.concoursdance.presentation;
 
+import com.sampac.concoursdance.dataaccess.entities.Concours;
 import com.sampac.concoursdance.dataaccess.entities.Jury;
 import com.sampac.concoursdance.exceptions.ElementNotFoundException;
 import com.sampac.concoursdance.metier.dto.CandidatDTO;
 import com.sampac.concoursdance.metier.dto.ConcoursDTO;
+import com.sampac.concoursdance.metier.dto.ConcoursDTOSmall;
 import com.sampac.concoursdance.metier.dto.JuryDTO;
 import com.sampac.concoursdance.metier.services.CandidatServiceImpl;
 import com.sampac.concoursdance.metier.services.ConcoursServiceImpl;
@@ -34,20 +36,24 @@ public class Menu {
         System.out.println("============= Menu Principal =============");
         System.out.println("==========================================");
         int choix = 0;
-        do{
+        do {
             try {
                 displayMenu();
                 System.out.print("=> ");
                 choix = Integer.parseInt(scan.nextLine());
                 mapChoix(choix);
             } catch (NumberFormatException ex) {
-                System.out.println(Color.ANSI_RED.val+"Saisie invalide, veuillez entrez un nombre"+Color.ANSI_RESET.val);
+                System.out.println(Color.ANSI_RED.val + "Saisie invalide, veuillez entrez un nombre" + Color.ANSI_RESET.val);
             }
-        }while (choix != 6);
+        } while (choix != 6);
     }
+
     private void displayMenu() {
-        System.out.println("""
-                --- MENU Concour dance ---
+        System.out.println(Color.ANSI_PURPLE.val
+                +"""
+                --- MENU DANCE ---\n"""
+                +Color.ANSI_RESET.val
+                +"""
                 1 - Créer un concour
                 2 - Lister un concour
                 3 - Détail d'un concour
@@ -56,19 +62,39 @@ public class Menu {
                 6 - quitter """);
     }
 
-    private void mapChoix(int choix){
-        switch (choix){
+    private void mapChoix(int choix) {
+        switch (choix) {
             case 1 -> createConcours();
             case 2 -> displayAll();
             case 3 -> detailConcours();
-            case 4 -> quit();
-            case 5 -> quit();
+            case 4 -> modifConcours();
+            case 5 -> findCandidat();
             case 6 -> quit();
             default -> System.out.println("choix invalide");
         }
     }
-    private void afficheJury(List<JuryDTO> jurys){
-        System.out.println(Color.ANSI_PURPLE.val+"Liste des juries".toUpperCase()+Color.ANSI_RESET.val);
+
+    private void modifConcours() {
+    }
+
+    private void findCandidat() {
+        System.out.println(Color.ANSI_GREEN.val+"veuiller donner id du candidat: ".toUpperCase()+Color.ANSI_RESET.val);
+        long id = Long.parseLong(scan.nextLine());
+        try {
+            CandidatDTO candidatDTO=can_service.getByID(id);
+            System.out.format("| %d | %s | %d ans |\n",
+                    candidatDTO.getId(),
+                    candidatDTO.getNom(),
+                    candidatDTO.getAge());
+            afficheConcoursSmall(candidatDTO.getConcours(),candidatDTO.getNom());
+
+        } catch (ElementNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void afficheJury(List<JuryDTO> jurys) {
+        System.out.println(Color.ANSI_PURPLE.val + "Liste des juries".toUpperCase() + Color.ANSI_RESET.val);
         for (JuryDTO juryDTO : jurys) {
             System.out.format("| %d | %s | %s |\n",
                     juryDTO.getId(),
@@ -77,16 +103,25 @@ public class Menu {
         }
     }
 
-//    private void afficheCandidat(List<CandidatDTO> candidats) {
-//        System.out.println(Color.ANSI_PURPLE.val+"Liste des juries".toUpperCase()+Color.ANSI_RESET.val);
-//        for (JuryDTO juryDTO : jurys) {
-//            System.out.format("| %d | %s | %s |\n",
-//                    juryDTO.getId(),
-//                    juryDTO.getNom(),
-//                    juryDTO.getExpertise());
-//        }
-//    }
-
+    private void afficheCandidat(List<CandidatDTO> candidats) {
+        System.out.println(Color.ANSI_BLUE.val+"Liste des Participants ".toUpperCase()+Color.ANSI_RESET.val);
+        for (CandidatDTO candidatDTO : candidats) {
+            System.out.format("| %d | %s | %d ans |\n",
+                    candidatDTO.getId(),
+                    candidatDTO.getNom(),
+                    candidatDTO.getAge());
+        }
+    }
+    private void afficheConcoursSmall(List<ConcoursDTOSmall> concours,String nom) {
+        System.out.println(Color.ANSI_BLUE.val+("Liste des Concours où "+nom+" Participe").toUpperCase()+Color.ANSI_RESET.val);
+        for (ConcoursDTOSmall concoursDTO : concours) {
+            System.out.format("| %d | %s | %s | %s |\n",
+                    concoursDTO.getId(),
+                    concoursDTO.getTheme(),
+                    concoursDTO.getDate(),
+                    concoursDTO.getDescription());
+        }
+    }
     private List<JuryDTO> choixJury(){
         int choix, nbJury=0;
         System.out.println(Color.ANSI_GREEN.val+"Choisissez le(s) jury(s): ".toUpperCase()+Color.ANSI_RESET.val);
@@ -149,8 +184,17 @@ public class Menu {
     }
 
     private void displayAll(){
-        con_service.getAll()
-                .forEach( System.out::println );
+       List<ConcoursDTO>list= con_service.getAll();
+        System.out.println(Color.ANSI_BLUE.val+("Liste des Concours".toUpperCase()+Color.ANSI_RESET.val));
+
+        for (ConcoursDTO concoursDTO : list) {
+            System.out.format("| %d | %s | %s | %s |\n",
+                    concoursDTO.getId(),
+                    concoursDTO.getTheme(),
+                    concoursDTO.getDate(),
+                    concoursDTO.getDescription());
+        }
+
     }
 
     private void detailConcours() {
@@ -163,14 +207,8 @@ public class Menu {
             System.out.println("Information: "+concoursDTO.getDescription()+Color.ANSI_RESET.val);
 
             afficheJury(concoursDTO.getJuges());
+            afficheCandidat(concoursDTO.getParticipants());
 
-            System.out.println(Color.ANSI_BLUE.val+"Liste des Participants ".toUpperCase()+Color.ANSI_RESET.val);
-            for (CandidatDTO candidatDTO : concoursDTO.getParticipants()) {
-                System.out.format("| %d | %s | %d ans |\n",
-                        candidatDTO.getId(),
-                        candidatDTO.getNom(),
-                        candidatDTO.getAge());
-            }
         } catch ( ElementNotFoundException e) {
             System.out.println(e.getMessage());
         }
