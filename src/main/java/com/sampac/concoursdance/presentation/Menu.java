@@ -2,6 +2,7 @@ package com.sampac.concoursdance.presentation;
 
 import com.sampac.concoursdance.dataaccess.entities.Concours;
 import com.sampac.concoursdance.dataaccess.entities.Jury;
+import com.sampac.concoursdance.exceptions.AlreadyExistException;
 import com.sampac.concoursdance.exceptions.ElementNotFoundException;
 import com.sampac.concoursdance.metier.dto.CandidatDTO;
 import com.sampac.concoursdance.metier.dto.ConcoursDTO;
@@ -129,21 +130,25 @@ public class Menu {
 
     private void afficheJury(List<JuryDTO> jurys) {
         System.out.println(Color.ANSI_PURPLE.val + "Liste des juries".toUpperCase() + Color.ANSI_RESET.val);
+        int i = 1;
         for (JuryDTO juryDTO : jurys) {
             System.out.format("| %d | %s | %s |\n",
-                    juryDTO.getId(),
+                    i,
                     juryDTO.getNom(),
                     juryDTO.getExpertise());
+            i++;
         }
     }
 
     private void afficheCandidat(List<CandidatDTO> candidats) {
         System.out.println(Color.ANSI_BLUE.val+"Liste des Participants ".toUpperCase()+Color.ANSI_RESET.val);
+        int i =1;
         for (CandidatDTO candidatDTO : candidats) {
             System.out.format("| %d | %s | %d ans |\n",
-                    candidatDTO.getId(),
+                    i,
                     candidatDTO.getNom(),
                     candidatDTO.getAge());
+            i++;
         }
     }
     private void afficheConcoursSmall(List<ConcoursDTOSmall> concours,String nom) {
@@ -184,36 +189,53 @@ public class Menu {
         return selectedJury;
     }
 
-//    private List<CandidatDTO> choixCandidat(){
-//        int choix, nbJury=0;
-//        System.out.println(Color.ANSI_GREEN.val+"Choisissez le(s) jury(s): ".toUpperCase()+Color.ANSI_RESET.val);
-//        List<JuryDTO> juryDTOS = jur_service.getAll();
-//        List<JuryDTO> selectedJury = new ArrayList<>();
-//
-//        do {
-//
-//            try {
-//
-//                afficheJury(juryDTOS);
-//                System.out.print("=> ");
-//                choix = Integer.parseInt(scan.nextLine());
-//                if (choix > 0 && choix <= juryDTOS.size()) {
-//                    selectedJury.add(juryDTOS.remove(choix - 1));
-//                    nbJury++;
-//                } else
-//                    System.out.println(Color.ANSI_RED.val + "Saisie invalide, veuillez choisir un jury existant" + Color.ANSI_RESET.val);
-//
-//            } catch (NumberFormatException ex) {
-//                System.out.println(Color.ANSI_RED.val+"Saisie invalide, veuillez entrez un nombre"+Color.ANSI_RESET.val);
-//            }
-//
-//        } while (nbJury < NB_MAX_JURY);
-//
-//        return selectedJury;
-//    }
+    private List<CandidatDTO> choixCandidat(){
+        int choix;
+        char yesNon = 'y';
+        System.out.println(Color.ANSI_GREEN.val+"Choix de Candidat(e)s: ".toUpperCase()+Color.ANSI_RESET.val);
+        List<CandidatDTO> candidatDTOS = can_service.getAll();
+        List<CandidatDTO> selectedCandi = new ArrayList<>();
+
+        do {
+
+            try {
+
+                afficheCandidat(candidatDTOS);
+                System.out.print("=> ");
+                choix = Integer.parseInt(scan.nextLine());
+                if (choix > 0 && choix <= candidatDTOS.size()) {
+                    selectedCandi.add(candidatDTOS.remove(choix - 1));
+
+                    if (candidatDTOS.size() > 0) {
+                        System.out.println("Voulez-vous ajouter un autre candidat ? (y/n)");
+                        yesNon = scan.nextLine().charAt(0);
+                    }
+                }
+                else
+                    System.out.println(Color.ANSI_RED.val + "Saisie invalide, veuillez choisir un candidat existant" + Color.ANSI_RESET.val);
+
+            } catch (NumberFormatException ex) {
+                System.out.println(Color.ANSI_RED.val+"Saisie invalide, veuillez entrez un nombre"+Color.ANSI_RESET.val);
+            }
+
+        } while ((yesNon == 'y' || yesNon == 'Y') && candidatDTOS.size() > 0);
+
+        return selectedCandi;
+    }
 
     private void createConcours() {
         List<JuryDTO> selectedJury = choixJury();
+        List<CandidatDTO> selectedCand = choixCandidat();
+
+        ConcoursDTO.ConcoursDTOBuilder conBuilder = initValueConcour();
+        conBuilder.juges(selectedJury);
+        conBuilder.participants(selectedCand);
+
+        try {
+            con_service.insert(conBuilder.build());
+        } catch (AlreadyExistException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
